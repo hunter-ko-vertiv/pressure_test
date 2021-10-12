@@ -5,8 +5,8 @@ import { randomItem } from "https://jslib.k6.io/k6-utils/1.1.0/index.js";
 export let options = {
     insecureSkipTLSVerify: true,
     vus: 1,
-    iterations: 1000,
-    duration: '20m'
+    iterations: 2000,
+    duration: '120m'
 };
 
 const HOST_IP = 'https://10.162.249.208'
@@ -53,5 +53,5 @@ export default function (authToken) {
             'Is status 201': (r) => r.status === 201
         })
     })
-    // sleep(1);
+    sleep(2);
 }

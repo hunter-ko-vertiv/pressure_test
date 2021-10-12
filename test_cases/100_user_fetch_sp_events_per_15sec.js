@@ -10,7 +10,7 @@ export let options = {
 
 const HOST_IP = 'https://10.162.249.208';
 const LOGIN_URL = '/api/v1/usersessions'
-const SP_LIST =  '/api/v1/devices'
+const SP_LIST =  '/api/v1/devices?filter=&page_token=0&page_size=200&order_by=created_at%20DESC'
 export function setup() {
 
     const accountInfo = {
