@@ -52,6 +52,6 @@ export default function (authToken) {
             'Is status 200': (r) => r.status === 200
         })
     })
-
+    sleep(120)
 }
 

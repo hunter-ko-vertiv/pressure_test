@@ -38,7 +38,7 @@ export default function (authToken) {
     }
 
     group("Add Devices", function () {
-        const url = `https://10.162.249.208/api/v1/discoveryRequests`
+        const url = `${HOST_IP}/api/v1/discoveryRequests`
         const res = http.post(url, JSON.stringify({
             startIpAddress: `10.162.249.63~${8001 + (count % 15)}@r${count}`,
             endIpAddress: `10.162.249.63~${8001 + (count % 15)}@r${count}`,
