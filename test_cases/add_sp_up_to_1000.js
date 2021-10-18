@@ -5,16 +5,20 @@ import { randomItem } from "https://jslib.k6.io/k6-utils/1.1.0/index.js";
 export let options = {
     insecureSkipTLSVerify: true,
     vus: 1,
-    iterations: 2000,
-    duration: '120m'
+    iterations: 1000,
+    duration: '6h'
 };
 
-const HOST_IP = 'https://10.162.249.208'
+const HOST_IP = 'https://10.36.62.126'
 
 let count = 0;
 
 export function setup() {
 
+
+}
+
+export default function () {
     const url = HOST_IP + "/api/v1/usersessions"
 
     const accountInfo = {
@@ -24,10 +28,7 @@ export function setup() {
 
     const res = http.post(url, JSON.stringify(accountInfo))
 
-    return JSON.parse(res.body).jwt
-}
-
-export default function (authToken) {
+    const authToken = JSON.parse(res.body).jwt
 
     count++;
 
@@ -40,8 +41,8 @@ export default function (authToken) {
     group("Add Devices", function () {
         const url = `${HOST_IP}/api/v1/discoveryRequests`
         const res = http.post(url, JSON.stringify({
-            startIpAddress: `10.162.249.63~${8001 + (count % 15)}@r${count}`,
-            endIpAddress: `10.162.249.63~${8001 + (count % 15)}@r${count}`,
+            startIpAddress: `10.207.15.46~${8001 + (count % 10)}@r${count}`,
+            endIpAddress: `10.207.15.46~${8001 + (count % 10)}@r${count}`,
             autoAdd: true,
             generalCredentials:
                 {
@@ -49,9 +50,10 @@ export default function (authToken) {
                     password: 'calvin'
                 }
         }), option)
+        console.log(res.status);
         check(res, {
             'Is status 201': (r) => r.status === 201
         })
+        sleep(3);
     })
-    sleep(2);
 }

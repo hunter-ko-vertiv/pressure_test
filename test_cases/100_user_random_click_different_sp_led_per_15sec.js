@@ -5,6 +5,7 @@ import { randomItem } from "https://jslib.k6.io/k6-utils/1.1.0/index.js";
 export let options = {
     insecureSkipTLSVerify: true,
     vus: 100,
+    duration: '10m'
 };
 
 const HOST_IP = 'https://10.162.249.208';
@@ -33,7 +34,7 @@ export default function (authToken) {
 
     const deviceList = JSON.parse(http.get(HOST_IP + SP_LIST, option).body);
     const deviceIds = randomItem(deviceList.devices.map(device => device.id))
-
+    console.log(deviceIds)
 
     group("Change sp LED Status", function () {
 

@@ -4,8 +4,8 @@ import { randomItem } from "https://jslib.k6.io/k6-utils/1.1.0/index.js";
 
 export let options = {
     insecureSkipTLSVerify: true,
-    vus: 1,
-    iterations: 1
+    vus: 100,
+    duration: '10m'
 };
 
 const HOST_IP = 'https://10.162.249.208';
@@ -33,14 +33,13 @@ export default function (authToken) {
 
     const deviceList = JSON.parse(http.get(HOST_IP + SP_LIST, option).body);
     const deviceIds = randomItem(deviceList.devices.map(device => device.id))
-
+    console.log(deviceIds);
 
     group("Update Sp Boot Order", function () {
 
         const url = HOST_IP + `/api/v1/devices/${deviceIds}/bootOrder`
 
         const boot_order = JSON.parse(http.get(url, option).body).boot_info.boot_order;
-        console.log(JSON.stringify(boot_order))
         const res = http.patch(url, JSON.stringify(
             {
                 boot_info: {
@@ -52,6 +51,11 @@ export default function (authToken) {
         check(res, {
             'Is status 200': (r) => r.status === 200
         })
+        if (res.status !== 200) {
+            console.log(JSON.stringify(res.body));
+        } else {
+            console.log(res.status, 'ok')
+        }
     })
     sleep(60)
 
