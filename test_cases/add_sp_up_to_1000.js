@@ -5,7 +5,7 @@ import { randomItem } from "https://jslib.k6.io/k6-utils/1.1.0/index.js";
 export let options = {
     insecureSkipTLSVerify: true,
     vus: 1,
-    iterations: 1000,
+    iterations: 2000,
     duration: '6h'
 };
 
@@ -29,7 +29,7 @@ export default function () {
     const res = http.post(url, JSON.stringify(accountInfo))
 
     const authToken = JSON.parse(res.body).jwt
-
+    const id = JSON.parse(res.body).usersession.id
     count++;
 
     const option = {
@@ -54,6 +54,13 @@ export default function () {
         check(res, {
             'Is status 201': (r) => r.status === 201
         })
-        sleep(3);
     })
+    group("Log out", function () {
+        const url = HOST_IP + '/api/v1/userSessions/' + id
+        const res = http.del(url, {}, option)
+        check(res, {
+            'Is status 204': (r) => r.status === 204
+        })
+    })
+    sleep(5);
 }

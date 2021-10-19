@@ -4,12 +4,12 @@ import { randomItem } from "https://jslib.k6.io/k6-utils/1.1.0/index.js";
 
 export let options = {
     insecureSkipTLSVerify: true,
-    vus:100,
+    vus: 100,
     // stages: [
     //     {duration: '5m', target: 100},
     //     {duration: '55m', target: 100}
     // ],
-    duration: '1h'
+    duration: '16h'
 };
 
 const HOST_IP = 'https://10.36.62.126';
@@ -27,7 +27,16 @@ export function setup() {
     return JSON.parse(res.body).jwt
 }
 
-export default function (authToken) {
+export default function () {
+    const accountInfo = {
+        username: "admin",
+        password: "admin123"
+    }
+
+    const res = http.post(HOST_IP + LOGIN_URL, JSON.stringify(accountInfo))
+
+    const authToken = JSON.parse(res.body).jwt
+    const id = JSON.parse(res.body).usersession.id
     const option = {
         headers: {
             Authorization: `Bearer ${authToken}`
@@ -102,6 +111,14 @@ export default function (authToken) {
         }), option)
         check(res, {
             'Is status 200': (r) => r.status === 200
+        })
+    })
+
+    group("Log out", function () {
+        const url = HOST_IP + '/api/v1/userSessions/' + id
+        const res = http.del(url, {}, option)
+        check(res, {
+            'Is status 204': (r) => r.status === 204
         })
     })
 
