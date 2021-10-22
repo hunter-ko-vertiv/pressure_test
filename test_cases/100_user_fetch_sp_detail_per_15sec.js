@@ -9,7 +9,7 @@ export let options = {
     //     {duration: '5m', target: 100},
     //     {duration: '55m', target: 100}
     // ],
-    duration: '1h'
+    duration: '16h'
 };
 
 const HOST_IP = 'https://10.36.62.126';
@@ -102,6 +102,22 @@ export default function () {
         const res = http.post(url, JSON.stringify({
             id: deviceIds
         }), option)
+        check(res, {
+            'Is status 200': (r) => r.status === 200
+        })
+    })
+
+    group("Get Events", function () {
+
+        const url = HOST_IP + `/api/v1/devices/${deviceIds}/logEntries`
+
+        const total_length = JSON.parse(http.get(url, option).body).total_size;
+
+        const page_size = 25;
+        const random_page = Math.floor(Math.random() * Math.floor(total_length / page_size));
+
+        const res = http.get(url + `?filter=&page_token=${random_page}&page_size=25`, option)
+
         check(res, {
             'Is status 200': (r) => r.status === 200
         })
