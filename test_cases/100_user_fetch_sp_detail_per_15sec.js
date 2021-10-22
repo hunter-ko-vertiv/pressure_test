@@ -4,12 +4,12 @@ import { randomItem } from "https://jslib.k6.io/k6-utils/1.1.0/index.js";
 
 export let options = {
     insecureSkipTLSVerify: true,
-    vus: 100,
+    vus: 25,
     // stages: [
     //     {duration: '5m', target: 100},
     //     {duration: '55m', target: 100}
     // ],
-    duration: '16h'
+    duration: '1h'
 };
 
 const HOST_IP = 'https://10.36.62.126';
@@ -17,14 +17,7 @@ const LOGIN_URL = '/api/v1/usersessions'
 const SP_LIST =  '/api/v1/devices?filter=&page_token=0&page_size=200&order_by=created_at%20DESC'
 export function setup() {
 
-    const accountInfo = {
-        username: "admin",
-        password: "admin123"
-    }
 
-    const res = http.post(HOST_IP + LOGIN_URL, JSON.stringify(accountInfo))
-
-    return JSON.parse(res.body).jwt
 }
 
 export default function () {

@@ -5,7 +5,7 @@ import { randomItem } from "https://jslib.k6.io/k6-utils/1.1.0/index.js";
 export let options = {
     insecureSkipTLSVerify: true,
     vus: 1,
-    iterations: 2000,
+    iterations: 300,
     duration: '6h'
 };
 
