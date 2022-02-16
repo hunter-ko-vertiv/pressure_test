@@ -5,13 +5,13 @@ import { randomItem } from "https://jslib.k6.io/k6-utils/1.1.0/index.js";
 export let options = {
     insecureSkipTLSVerify: true,
     vus: 1,
-    iterations: 300,
-    duration: '6h'
+    iterations: 977,
+    duration: '2d'
 };
 
-const HOST_IP = 'https://10.36.62.126'
+const HOST_IP = 'https://10.207.15.21/'
 
-let count = 0;
+let count = 23;
 
 export function setup() {
 
@@ -62,5 +62,5 @@ export default function () {
             'Is status 204': (r) => r.status === 204
         })
     })
-    sleep(5);
+    sleep(120);
 }

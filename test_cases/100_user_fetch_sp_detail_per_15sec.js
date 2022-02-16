@@ -9,10 +9,10 @@ export let options = {
     //     {duration: '5m', target: 100},
     //     {duration: '55m', target: 100}
     // ],
-    duration: '16h'
+    duration: '1h'
 };
 
-const HOST_IP = 'https://10.36.62.126';
+const HOST_IP = 'https://10.207.15.21';
 const LOGIN_URL = '/api/v1/usersessions'
 const SP_LIST =  '/api/v1/devices?filter=&page_token=0&page_size=200&order_by=created_at%20DESC'
 export function setup() {
@@ -109,15 +109,14 @@ export default function () {
 
     group("Get Events", function () {
 
-        const url = HOST_IP + `/api/v1/devices/${deviceIds}/logEntries`
+        const url = HOST_IP + `/api/v1/events`
 
         const total_length = JSON.parse(http.get(url, option).body).total_size;
 
         const page_size = 25;
         const random_page = Math.floor(Math.random() * Math.floor(total_length / page_size));
-
-        const res = http.get(url + `?filter=&page_token=${random_page}&page_size=25`, option)
-
+        const encodeUrl = url + `?fields=*&filter=event_subject.subject_id eq "${deviceIds}" and event_source.name eq "firefly-svc-sp-management"&page_token=0&page_size=25`;
+        const res = http.get(encodeURI(encodeUrl), option)
         check(res, {
             'Is status 200': (r) => r.status === 200
         })
